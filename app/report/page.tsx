@@ -209,28 +209,28 @@ function FactorColumn({
               <Link key={item.id} href={`/lessons/${item.id}`}>
                 <Card className={`cursor-pointer border-l-4 ${borderColor} transition-shadow hover:shadow-md`}>
                   <CardContent className="p-3">
-                    <div className="mb-1 flex flex-wrap items-center gap-1">
+                    <div className="mb-1.5 flex flex-wrap items-center gap-1">
                       {item.level3 && (
-                        <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                        <Badge variant="outline" className="text-xs">
                           {item.level3}
                         </Badge>
                       )}
                       {item.level3_sub && (
-                        <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                        <Badge variant="secondary" className="text-xs">
                           {item.level3_sub}
                         </Badge>
                       )}
                     </div>
-                    <p className="text-[10px] text-muted-foreground">
+                    <p className="text-xs text-muted-foreground">
                       {item.project_name}
                       {item.evaluation_name && ` · ${item.evaluation_name}`}
                     </p>
 
-                    <div className="mt-1.5 space-y-1.5">
+                    <div className="mt-2 space-y-1.5">
                       {sections.map((sec, i) => (
                         <div key={i}>
                           {sec.title && (
-                            <p className="rounded bg-primary/10 px-1.5 py-0.5 text-[11px] font-bold text-primary">
+                            <p className="text-xs font-medium text-foreground">
                               {sec.title}
                             </p>
                           )}
@@ -243,7 +243,7 @@ function FactorColumn({
                               return (
                                 <li
                                   key={j}
-                                  className="flex gap-1.5 text-[11px] leading-relaxed text-muted-foreground"
+                                  className="flex gap-1.5 text-xs leading-relaxed text-muted-foreground"
                                 >
                                   <span className="mt-1.5 inline-block h-1 w-1 shrink-0 rounded-full bg-muted-foreground/40" />
                                   <span className="line-clamp-2">{cleaned || b}</span>
@@ -251,7 +251,7 @@ function FactorColumn({
                               );
                             })}
                             {sec.bullets.length > 3 && (
-                              <li className="text-[11px] text-primary">
+                              <li className="text-xs text-primary">
                                 +{sec.bullets.length - 3}개 더보기
                               </li>
                             )}
