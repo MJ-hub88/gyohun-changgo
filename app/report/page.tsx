@@ -233,13 +233,6 @@ function LessonCard({
           onClick={() => setOpen(!open)}
         >
           {/* 1) 키워드 */}
-          <div className="mb-1 flex flex-wrap items-center gap-1">
-            {item.level3_sub && (
-              <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-                {item.level3_sub}
-              </Badge>
-            )}
-          </div>
           <p className="text-[13px] font-bold leading-snug">{parsed.keyword}</p>
 
           {/* 메커니즘 한 줄 요약 */}
