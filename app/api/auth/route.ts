@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const { password } = await req.json();
-  const correctPassword = process.env.SITE_PASSWORD || "1234";
+  const correctPassword = (process.env.SITE_PASSWORD || "1234").replace(/"/g, "").trim();
 
   if (password === correctPassword) {
     const response = NextResponse.json({ success: true });
