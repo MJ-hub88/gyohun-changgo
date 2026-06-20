@@ -57,8 +57,8 @@ export default function NewLessonPage() {
     monitoring_result: "", monitoring_status: "",
   });
 
-  function update(field: string, value: string) {
-    setForm((prev) => ({ ...prev, [field]: value }));
+  function update(field: string, value: string | null) {
+    setForm((prev) => ({ ...prev, [field]: value || "" }));
   }
 
   async function handleExtract() {
