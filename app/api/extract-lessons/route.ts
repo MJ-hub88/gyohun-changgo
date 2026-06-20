@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export async function POST(req: NextRequest) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
-      { error: "ANTHROPIC_API_KEY가 설정되지 않았습니다. .env.local에 추가해주세요." },
+      { error: "GEMINI_API_KEY가 설정되지 않았습니다. .env.local에 추가해주세요." },
       { status: 500 }
     );
   }
@@ -21,8 +21,6 @@ export async function POST(req: NextRequest) {
       const buffer = Buffer.from(await file.arrayBuffer());
 
       if (file.name.endsWith(".pdf")) {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const pdfParse = require("pdf-parse") as { PDFParse: new (buf: Buffer) => { getAllText: () => Promise<string> } };
         const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
         const data = new Uint8Array(buffer);
         const doc = await getDocument({ data }).promise;
@@ -61,15 +59,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const anthropic = new Anthropic({ apiKey });
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-    const message = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 4096,
-      messages: [
-        {
-          role: "user",
-          content: `아래는 사업 평가 보고서입니다. 교훈·시사점·작동요인·비작동요인·개선사항을 추출해주세요.
+    const prompt = `아래는 사업 평가 보고서입니다. 교훈·시사점·작동요인·비작동요인·개선사항을 추출해주세요.
 
 ## 분류 체계 (반드시 이 중에서 선택)
 
@@ -90,10 +83,10 @@ export async function POST(req: NextRequest) {
 
 단순히 "~가 향상되었다", "~가 부족하다"에 그치지 말고 다음을 포함해야 합니다:
 1. **메커니즘**: 왜 작동했는지/왜 작동하지 않았는지의 인과 구조
-2. **실행 방법**: 구체적으로 어떻게 해야 하는지 (예: 교사가 수업에서 디지털 도구를 어떤 단계에서 어떻게 활용했는지, 구조화된 수업 설계의 구체적 구성)
+2. **실행 방법**: 구체적으로 어떻게 해야 하는지
 3. **필요한 조치**: 개선사항이면 구체적 실행 단계 (a), (b), (c)로 나눠서
 
-JSON 배열만 반환하세요:
+JSON 배열만 반환하세요. 다른 텍스트 없이 JSON만:
 
 [
   {
@@ -111,13 +104,10 @@ JSON 배열만 반환하세요:
 ]
 
 보고서 내용:
-${text.slice(0, 30000)}`,
-        },
-      ],
-    });
+${text.slice(0, 30000)}`;
 
-    const responseText =
-      message.content[0].type === "text" ? message.content[0].text : "";
+    const result = await model.generateContent(prompt);
+    const responseText = result.response.text();
 
     let lessons;
     try {
