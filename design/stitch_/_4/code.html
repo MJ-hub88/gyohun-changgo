@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>교훈 상세 | 교훈창고</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&amp;family=Inter:wght@500;600&amp;family=Noto+Sans:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#93000b",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed": "#410002",
+                    "on-surface-variant": "#434655",
+                    "secondary": "#006e2d",
+                    "inverse-surface": "#2e3132",
+                    "outline": "#737686",
+                    "inverse-primary": "#b4c5ff",
+                    "primary": "#004ac6",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#dbe1ff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "tertiary-container": "#d52022",
+                    "surface-container": "#edeeef",
+                    "outline-variant": "#c3c6d7",
+                    "secondary-fixed": "#7ffc97",
+                    "surface": "#f8f9fa",
+                    "on-secondary-fixed-variant": "#005320",
+                    "surface-variant": "#e1e3e4",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "surface-container-low": "#f3f4f5",
+                    "on-secondary-fixed": "#002109",
+                    "surface-container-high": "#e7e8e9",
+                    "surface-container-highest": "#e1e3e4",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-primary-container": "#eeefff",
+                    "surface-tint": "#0053db",
+                    "on-surface": "#191c1d",
+                    "secondary-fixed-dim": "#62df7d",
+                    "on-primary": "#ffffff",
+                    "on-background": "#191c1d",
+                    "background": "#f8f9fa",
+                    "surface-bright": "#f8f9fa",
+                    "primary-container": "#2563eb",
+                    "surface-dim": "#d9dadb",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#00174b",
+                    "on-tertiary-container": "#ffecea",
+                    "tertiary-fixed": "#ffdad6",
+                    "secondary-container": "#7cf994",
+                    "on-error-container": "#93000a",
+                    "tertiary": "#ae0010",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb4ab",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#007230"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "container-max": "1280px",
+                    "margin-desktop": "40px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Noto Sans"],
+                    "label-sm": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Noto Sans"],
+                    "headline-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f8f9fa;
+            color: #191c1d;
+            font-family: 'Noto Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #E5E7EB;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-surface shadow-sm transition-all duration-300" id="top-bar">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-high p-2 rounded-full transition-colors cursor-pointer active:opacity-80" onclick="window.history.back()">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">교훈 상세</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="hidden md:flex items-center space-x-6 mr-6">
+<span class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors cursor-pointer">대시보드</span>
+<span class="font-label-md text-label-md text-primary font-bold transition-colors cursor-pointer">교훈 목록</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-bold border-2 border-white shadow-sm overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional corporate headshot of a middle-aged male business leader, wearing a clean charcoal suit and a soft blue shirt. The background is a blurred high-end modern office with soft daylight and a clean light-mode aesthetic. The lighting is flattering and professional, emphasizing a reliable and intellectual presence in a corporate knowledge management context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5ETZMQr7gbquc9XZnr223rxZNCTtNMT_ls9ltTXzQZ8EUx1jo1dg0kfWzASTF2x9eKpNVrWXnHsphdxfsXqFJ0qRT8sr0OD93-94p5fuHs0XafdsTdorOcgXLjk4SENoFddNadAq9sOafwtKCd4_m6S1Dd56aZ4Dn-bnn8Cfw4lViL5GwJPoYVmozVL5dwQAPiRI9CGNmuASjZ-IBHnTxBT9pRBp1YYhIMURdF99u-BYdb6wlUkcnrEq2-mGgJg-0NBMLav0ny8g"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 mb-20 md:mb-12">
+<div class="bento-grid">
+<!-- Header Section (Bento Block 1) -->
+<div class="col-span-12 lg:col-span-8 space-y-6">
+<div class="glass-card rounded-xl p-6 md:p-8 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] transition-all hover:shadow-[0px_8px_20px_rgba(0,0,0,0.08)]">
+<div class="flex flex-wrap items-center gap-2 mb-4">
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">2022</span>
+<span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> 작동
+                        </span>
+</div>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-background mb-4 leading-tight">
+                        차세대 스마트 공장 자동화 프로젝트
+                    </h2>
+<div class="flex flex-wrap gap-3">
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-lg border border-outline-variant">
+<span class="font-label-sm text-label-sm text-outline">분야</span>
+<span class="font-label-md text-label-md text-on-surface">스마트 제조</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-lg border border-outline-variant">
+<span class="font-label-sm text-label-sm text-outline">사업요소</span>
+<span class="font-label-md text-label-md text-on-surface">운영</span>
+</div>
+</div>
+</div>
+<!-- Content Section (Bento Block 2) -->
+<div class="space-y-6">
+<section class="glass-card rounded-xl p-6 md:p-8 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border-l-4 border-l-primary">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">lightbulb</span>
+<h3 class="font-headline-md text-headline-md text-on-background">교훈 내용</h3>
+</div>
+<div class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                            모듈화된 제어 시스템 도입으로 유지보수 비용 <span class="text-primary font-bold">30% 절감</span> 및 장애 복구 시간을 획기적으로 단축하였습니다. 
+                            각 모듈 간 인터페이스를 표준화하여 확장성을 확보한 것이 핵심 성공 요인이었습니다.
+                        </div>
+</section>
+<section class="glass-card rounded-xl p-6 md:p-8 shadow-[0px_4px_12px_rgba(0,0,0,0.05)]">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-outline">history_edu</span>
+<h3 class="font-headline-md text-headline-md text-on-background">근거 / 맥락</h3>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant space-y-4">
+<p>기존의 통합형 시스템은 장애 발생 시 전체 라인이 멈추는 리스크가 있었으나, 이번 프로젝트를 통해 시스템을 개별 기능 단위로 분리하였습니다.</p>
+<p>과거 대규모 가동 중단 사고의 원인 분석 결과, 단일 지점 장애(Single Point of Failure)가 전체 시스템 마비로 이어지는 구조적 결함이 확인되었습니다. 이에 따라 독립적인 운영이 가능한 엣지 컴퓨팅 기반의 모듈형 아키텍처를 설계에 반영하였습니다.</p>
+</div>
+</section>
+</div>
+</div>
+<!-- Sidebar / Stats (Bento Block 3) -->
+<aside class="col-span-12 lg:col-span-4 space-y-6">
+<div class="bg-white rounded-xl p-6 border border-outline-variant shadow-sm relative overflow-hidden h-full min-h-[320px]">
+<div class="absolute inset-0 z-0 opacity-10">
+</div>
+<div class="relative z-10">
+<h4 class="font-headline-md text-headline-md text-on-background mb-6">관련 데이터</h4>
+<div class="space-y-4">
+<div class="p-4 bg-primary-container/10 rounded-lg border border-primary/20">
+<div class="text-label-sm font-label-sm text-primary mb-1 uppercase tracking-wider">효율성 개선</div>
+<div class="text-3xl font-bold text-primary">+24.5%</div>
+</div>
+<div class="p-4 bg-secondary-container/10 rounded-lg border border-secondary/20">
+<div class="text-label-sm font-label-sm text-secondary mb-1 uppercase tracking-wider">비용 절감액</div>
+<div class="text-3xl font-bold text-secondary">₩4.2B</div>
+</div>
+<div class="pt-4 mt-4 border-t border-dashed border-outline-variant">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-md text-label-md text-outline">작성자</span>
+<span class="font-label-md text-label-md text-on-surface">김지혁 수석연구원</span>
+</div>
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-md text-label-md text-outline">등록일</span>
+<span class="font-label-md text-label-md text-on-surface">2023.10.15</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-label-md text-label-md text-outline">열람수</span>
+<span class="font-label-md text-label-md text-on-surface">1,242</span>
+</div>
+</div>
+<div class="p-4 bg-primary-container/10 rounded-lg border border-primary/20">
+<div class="text-label-sm font-label-sm text-primary mb-1 uppercase tracking-wider">교육성과 (지표)</div>
+<div class="text-3xl font-bold text-primary">85.2%</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant mt-1">적절한 문해력을 가진 아동의 비율</div>
+</div></div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Action Buttons -->
+<div class="mt-8 flex flex-col md:flex-row items-center justify-end gap-4 pb-12">
+<button class="w-full md:w-auto px-10 py-3 border border-error text-error rounded-lg font-label-md text-label-md hover:bg-error-container/20 transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+                삭제
+            </button>
+<button class="w-full md:w-auto px-10 py-3 border border-outline text-on-surface-variant rounded-lg font-label-md text-label-md hover:bg-surface-container-high transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                수정
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center py-2 px-margin-mobile bg-surface shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] z-50">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-6 py-1 hover:bg-surface-container-highest transition-all active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm mt-1">대시보드</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-6 py-1 transition-all active:scale-95 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-label-sm text-label-sm mt-1">교훈 목록</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for the top bar shadow on scroll
+        window.onscroll = function() {
+            const topBar = document.getElementById('top-bar');
+            if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                topBar.classList.add('shadow-md');
+                topBar.classList.remove('shadow-sm');
+            } else {
+                topBar.classList.add('shadow-sm');
+                topBar.classList.remove('shadow-md');
+            }
+        };
+    </script>
+</body></html>
