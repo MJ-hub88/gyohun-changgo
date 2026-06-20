@@ -24,6 +24,7 @@ type Lesson = {
   level1: string;
   level2: string;
   level3: string | null;
+  level3_sub: string | null;
   level4: string | null;
   project_name: string;
   evaluation_name: string | null;
@@ -94,6 +95,7 @@ export default function LessonDetail() {
             <Badge variant="outline">{lesson.level1}</Badge>
             <Badge variant="outline">{lesson.level2}</Badge>
             {lesson.level3 && <Badge variant="outline">{lesson.level3}</Badge>}
+            {lesson.level3_sub && <Badge variant="secondary">{lesson.level3_sub}</Badge>}
             {lesson.level4 && <Badge variant="outline">{lesson.level4}</Badge>}
             <Badge className={getFactorColor(lesson.factor_type)}>
               {lesson.factor_type}

@@ -22,6 +22,7 @@ type Lesson = {
   level1: string;
   level2: string;
   level3: string | null;
+  level3_sub: string | null;
   level4: string | null;
   project_name: string;
   evaluation_name: string | null;
@@ -136,6 +137,7 @@ export default function LessonsPage() {
                     <div className="flex flex-wrap items-center gap-2">
                       <Badge variant="outline">{lesson.level2}</Badge>
                       {lesson.level3 && <Badge variant="outline">{lesson.level3}</Badge>}
+                      {lesson.level3_sub && <Badge variant="secondary">{lesson.level3_sub}</Badge>}
                       <Badge className={getFactorColor(lesson.factor_type)}>
                         {lesson.factor_type}
                       </Badge>

@@ -18,7 +18,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LEVELS, FACTOR_TYPES, MONITORING_STATUSES, getFactorColor } from "@/lib/constants";
+import { LEVELS, LEVEL3_CATEGORIES, getLevel3Subcategories, FACTOR_TYPES, MONITORING_STATUSES, getFactorColor } from "@/lib/constants";
 
 type ExtractedLesson = {
   level1: string;
@@ -51,7 +51,7 @@ export default function NewLessonPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [form, setForm] = useState({
-    level1: "교육", level2: "", level3: "", level4: "",
+    level1: "교육", level2: "", level3: "", level3_sub: "", level4: "",
     project_name: "", evaluation_name: "", factor_type: "", content: "",
     author: "", follow_up_type: "", responsible: "",
     monitoring_result: "", monitoring_status: "",
@@ -134,7 +134,7 @@ export default function NewLessonPage() {
     setSubmitting(true);
     const { error: err } = await supabase.from("lessons").insert({
       level1: form.level1, level2: form.level2,
-      level3: form.level3 || null, level4: form.level4 || null,
+      level3: form.level3 || null, level3_sub: form.level3_sub || null, level4: form.level4 || null,
       project_name: form.project_name, evaluation_name: form.evaluation_name || null,
       factor_type: form.factor_type, content: form.content, author: form.author || null,
       follow_up_type: form.follow_up_type || null, responsible: form.responsible || null,
@@ -331,20 +331,29 @@ export default function NewLessonPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <Label>성과영역 (L3)</Label>
-                    <Select value={form.level3} onValueChange={(v) => update("level3", v)}>
-                      <SelectTrigger><SelectValue placeholder="선택 (선택사항)" /></SelectTrigger>
+                    <Label>분석영역 (L3)</Label>
+                    <Select value={form.level3} onValueChange={(v) => { update("level3", v); update("level3_sub", ""); }}>
+                      <SelectTrigger><SelectValue placeholder="선택" /></SelectTrigger>
                       <SelectContent>
-                        {LEVELS.level3.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+                        {LEVEL3_CATEGORIES.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label>세부영역 (L3 소분류)</Label>
+                    <Select value={form.level3_sub} onValueChange={(v) => update("level3_sub", v)} disabled={!form.level3}>
+                      <SelectTrigger><SelectValue placeholder={form.level3 ? "선택" : "대분류 먼저"} /></SelectTrigger>
+                      <SelectContent>
+                        {form.level3 && getLevel3Subcategories(form.level3).map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
                     <Label>사업요소 (L4)</Label>
                     <Select value={form.level4} onValueChange={(v) => update("level4", v)}>
-                      <SelectTrigger><SelectValue placeholder="선택 (선택사항)" /></SelectTrigger>
+                      <SelectTrigger><SelectValue placeholder="선택" /></SelectTrigger>
                       <SelectContent>
                         {LEVELS.level4.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}
                       </SelectContent>
