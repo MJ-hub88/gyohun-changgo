@@ -331,11 +331,6 @@ function LessonCard({
         )}
       </CardContent>
     </Card>
-            );
-          })}
-        </div>
-      )}
-    </div>
   );
 }
 
