@@ -119,12 +119,10 @@ export default function Dashboard() {
             key={s.label}
             href={s.query ? `/lessons?${s.query}` : "/lessons"}
           >
-            <Card className="cursor-pointer transition-shadow hover:shadow-md">
-              <CardContent className="p-4">
-                <p className="text-sm text-muted-foreground">{s.label}</p>
+            <div className="cursor-pointer rounded-xl border border-gray-200 bg-white/80 p-4 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] backdrop-blur-sm transition-all hover:shadow-[0px_8px_20px_rgba(0,0,0,0.08)]">
+                <p className="text-sm text-gray-500">{s.label}</p>
                 <p className="text-2xl font-bold">{s.count}</p>
-              </CardContent>
-            </Card>
+            </div>
           </Link>
         ))}
       </div>

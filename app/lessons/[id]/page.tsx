@@ -89,41 +89,34 @@ export default function LessonDetail() {
         ← 목록으로
       </Link>
 
-      <Card>
-        <CardHeader>
-          <div className="flex flex-wrap gap-2">
-            <Badge variant="outline">{lesson.level1}</Badge>
-            <Badge variant="outline">{lesson.level2}</Badge>
-            {lesson.level3 && <Badge variant="outline">{lesson.level3}</Badge>}
-            {lesson.level3_sub && <Badge variant="secondary">{lesson.level3_sub}</Badge>}
-            {lesson.level4 && <Badge variant="outline">{lesson.level4}</Badge>}
-            <Badge className={getFactorColor(lesson.factor_type)}>
-              {lesson.factor_type}
-            </Badge>
-          </div>
-          <CardTitle className="mt-2 text-xl">{lesson.project_name}</CardTitle>
-          {lesson.evaluation_name && (
-            <p className="text-sm text-muted-foreground">{lesson.evaluation_name}</p>
-          )}
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <h3 className="mb-2 text-sm font-medium text-muted-foreground">교훈 및 시사점</h3>
-            <p className="whitespace-pre-wrap leading-relaxed">{lesson.content}</p>
-          </div>
+      <div className="rounded-xl border border-gray-200 bg-white/80 p-6 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] backdrop-blur-sm md:p-8">
+        <div className="mb-4 flex flex-wrap items-center gap-2">
+          <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600">{lesson.level2}</span>
+          {lesson.level3 && <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600">{lesson.level3}</span>}
+          {lesson.level3_sub && <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">{lesson.level3_sub}</span>}
+          {lesson.level4 && <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600">{lesson.level4}</span>}
+          <Badge className={getFactorColor(lesson.factor_type)}>
+            {lesson.factor_type}
+          </Badge>
+        </div>
+        <h2 className="text-xl font-bold leading-tight md:text-2xl">{lesson.project_name}</h2>
+        {lesson.evaluation_name && (
+          <p className="mt-1 text-sm text-gray-500">{lesson.evaluation_name}</p>
+        )}
+      </div>
 
-          {lesson.author && (
-            <p className="text-sm text-muted-foreground">작성: {lesson.author}</p>
-          )}
-        </CardContent>
-      </Card>
+      <div className="rounded-xl border-l-4 border-l-primary border border-gray-200 bg-white/80 p-6 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] backdrop-blur-sm md:p-8">
+        <h3 className="mb-4 text-lg font-bold">교훈 및 시사점</h3>
+        <div className="whitespace-pre-wrap text-sm leading-relaxed text-gray-600">{lesson.content}</div>
+        {lesson.author && (
+          <p className="mt-4 border-t pt-3 text-xs text-gray-400">작성: {lesson.author}</p>
+        )}
+      </div>
 
       {(lesson.follow_up_type || lesson.responsible || lesson.monitoring_result) && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">이행 추적</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
+        <div className="rounded-xl border border-gray-200 bg-white/80 p-6 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] backdrop-blur-sm md:p-8">
+          <h3 className="mb-4 text-lg font-bold">이행 추적</h3>
+          <div className="space-y-3">
             {lesson.follow_up_type && (
               <div>
                 <span className="text-sm text-muted-foreground">환류과제 구분: </span>
@@ -150,13 +143,13 @@ export default function LessonDetail() {
                 <p className="mt-1">{lesson.monitoring_result}</p>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       <div className="flex gap-3">
         <Link href={`/lessons/${lesson.id}/edit`}>
-          <Button variant="outline">수정</Button>
+          <Button variant="outline" className="rounded-lg px-8">수정</Button>
         </Link>
         <Dialog>
           <DialogTrigger>

@@ -14,20 +14,20 @@ export function Nav() {
   const pathname = usePathname();
 
   return (
-    <header className="border-b bg-white">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+    <header className="sticky top-0 z-50 w-full bg-white/80 shadow-sm backdrop-blur-sm transition-all">
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 md:px-10">
         <Link href="/" className="text-xl font-bold text-primary">
           교훈창고
         </Link>
-        <nav className="flex gap-1">
+        <nav className="flex items-center gap-1">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 pathname === link.href
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-accent"
+                  ? "bg-primary text-white"
+                  : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
               }`}
             >
               {link.label}
