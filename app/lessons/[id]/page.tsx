@@ -159,7 +159,7 @@ export default function LessonDetail() {
           <Button variant="outline">수정</Button>
         </Link>
         <Dialog>
-          <DialogTrigger asChild>
+          <DialogTrigger>
             <Button variant="destructive">삭제</Button>
           </DialogTrigger>
           <DialogContent>
