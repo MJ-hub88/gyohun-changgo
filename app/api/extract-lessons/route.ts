@@ -30,7 +30,8 @@ export async function POST(req: NextRequest) {
         for (let i = 1; i <= doc.numPages; i++) {
           const page = await doc.getPage(i);
           const content = await page.getTextContent();
-          allText += content.items.map((item: { str?: string }) => item.str || "").join(" ") + "\n";
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          allText += content.items.map((item: any) => item.str || "").join(" ") + "\n";
         }
         text = allText;
       } else if (file.name.endsWith(".txt")) {
