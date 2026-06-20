@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
@@ -32,7 +32,15 @@ type Lesson = {
   created_at: string;
 };
 
-export default function LessonsPage() {
+export default function LessonsPageWrapper() {
+  return (
+    <Suspense fallback={<div className="flex justify-center py-20"><div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>}>
+      <LessonsPage />
+    </Suspense>
+  );
+}
+
+function LessonsPage() {
   const searchParams = useSearchParams();
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
