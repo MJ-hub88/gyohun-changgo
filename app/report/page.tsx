@@ -221,10 +221,10 @@ function FactorColumn({
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm font-medium">{item.project_name}</p>
-                    {item.evaluation_name && (
-                      <p className="text-xs text-muted-foreground">{item.evaluation_name}</p>
-                    )}
+                    <p className="text-xs text-muted-foreground">
+                      {item.project_name}
+                      {item.evaluation_name && ` · ${item.evaluation_name}`}
+                    </p>
 
                     <div className="mt-2 space-y-1.5">
                       {sections.map((sec, i) => (
