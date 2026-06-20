@@ -126,7 +126,7 @@ export default function ReportPage() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <Select value={filterL2} onValueChange={setFilterL2}>
+        <Select value={filterL2} onValueChange={(v) => setFilterL2(v ?? "all")}>
           <SelectTrigger className="w-[150px]">
             <SelectValue placeholder="세부분야" />
           </SelectTrigger>
@@ -137,7 +137,7 @@ export default function ReportPage() {
             ))}
           </SelectContent>
         </Select>
-        <Select value={filterFt} onValueChange={setFilterFt}>
+        <Select value={filterFt} onValueChange={(v) => setFilterFt(v ?? "all")}>
           <SelectTrigger className="w-[150px]">
             <SelectValue placeholder="구분" />
           </SelectTrigger>

@@ -86,7 +86,7 @@ export default function LessonsPage() {
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <Select value={filterL2} onValueChange={(v) => { setFilterL2(v); setLoading(true); }}>
+        <Select value={filterL2} onValueChange={(v) => { setFilterL2(v ?? "all"); setLoading(true); }}>
           <SelectTrigger className="w-[140px]"><SelectValue placeholder="세부분야" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">전체 분야</SelectItem>
@@ -94,7 +94,7 @@ export default function LessonsPage() {
           </SelectContent>
         </Select>
 
-        <Select value={filterFt} onValueChange={(v) => { setFilterFt(v); setLoading(true); }}>
+        <Select value={filterFt} onValueChange={(v) => { setFilterFt(v ?? "all"); setLoading(true); }}>
           <SelectTrigger className="w-[140px]"><SelectValue placeholder="구분" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">전체 구분</SelectItem>
@@ -102,7 +102,7 @@ export default function LessonsPage() {
           </SelectContent>
         </Select>
 
-        <Select value={filterMs} onValueChange={(v) => { setFilterMs(v); setLoading(true); }}>
+        <Select value={filterMs} onValueChange={(v) => { setFilterMs(v ?? "all"); setLoading(true); }}>
           <SelectTrigger className="w-[140px]"><SelectValue placeholder="이행상태" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">전체 상태</SelectItem>
