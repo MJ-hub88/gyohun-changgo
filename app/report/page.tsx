@@ -201,6 +201,144 @@ export default function ReportPage() {
   );
 }
 
+function summarizeBullet(text: string): string {
+  const cleaned = text
+    .replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/, "")
+    .replace(/^\([a-z]\)\s*/, "")
+    .replace(/^[0-9]+[.)]\s*/, "");
+  const s = cleaned || text;
+  const colonIdx = s.indexOf(":");
+  if (colonIdx > 0 && colonIdx < 20) return s.substring(0, colonIdx);
+  return s.length > 40 ? s.substring(0, 40) + "…" : s;
+}
+
+function LessonCard({
+  item,
+  borderColor,
+}: {
+  item: Lesson;
+  borderColor: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const parsed = parseLesson(item.content);
+
+  return (
+    <Card
+      className={`border-l-4 ${borderColor} transition-shadow hover:shadow-md`}
+    >
+      <CardContent className="p-3 space-y-2">
+        {/* 접힌 상태: 키워드 + 요약 */}
+        <div
+          className="cursor-pointer"
+          onClick={() => setOpen(!open)}
+        >
+          {/* 1) 키워드 */}
+          <div className="mb-1 flex flex-wrap items-center gap-1">
+            {item.level3_sub && (
+              <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                {item.level3_sub}
+              </Badge>
+            )}
+          </div>
+          <p className="text-[13px] font-bold leading-snug">{parsed.keyword}</p>
+
+          {/* 메커니즘 한 줄 요약 */}
+          {!open && parsed.mechanism.length > 0 && (
+            <div className="mt-1.5 flex flex-wrap gap-1">
+              {parsed.mechanism[0].bullets.slice(0, 3).map((b, j) => (
+                <span key={j} className="inline-block rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-600">
+                  {summarizeBullet(b)}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* 핵심 교훈 한 줄 */}
+          {!open && parsed.coreLesson && (
+            <p className="mt-1.5 text-[11px] font-medium leading-snug text-blue-700 line-clamp-1">
+              💡 {parsed.coreLesson}
+            </p>
+          )}
+
+          {!open && (
+            <p className="mt-1 text-[10px] text-primary">▾ 자세히 보기</p>
+          )}
+        </div>
+
+        {/* 펼친 상태: 전체 내용 */}
+        {open && (
+          <>
+            {/* 2) 메커니즘 전체 */}
+            {parsed.mechanism.length > 0 && (
+              <div className="space-y-2 border-t pt-2">
+                {parsed.mechanism.map((sec, i) => (
+                  <div key={i}>
+                    {sec.title && (
+                      <p className="mb-1 inline-block rounded bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-gray-600">
+                        {sec.title}
+                      </p>
+                    )}
+                    <ul className="space-y-1">
+                      {sec.bullets.map((b, j) => {
+                        const cleaned = b
+                          .replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/, "")
+                          .replace(/^\([a-z]\)\s*/, "")
+                          .replace(/^[0-9]+[.)]\s*/, "");
+                        return (
+                          <li key={j} className="flex gap-1.5 text-[11px] leading-[1.6] text-muted-foreground">
+                            <span className="mt-[7px] inline-block h-1 w-1 shrink-0 rounded-full bg-muted-foreground/30" />
+                            <span>{cleaned || b}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* 3) 핵심 교훈 전체 */}
+            {parsed.coreLesson && (
+              <div className="rounded-md bg-blue-50 px-3 py-2">
+                <p className="mb-0.5 text-[10px] font-bold text-blue-600">핵심 교훈</p>
+                <p className="text-[11px] font-medium leading-[1.6] text-blue-900">
+                  {parsed.coreLesson}
+                </p>
+              </div>
+            )}
+
+            <div className="flex items-center justify-between border-t pt-1.5">
+              <p className="text-[10px] text-muted-foreground/70">
+                {item.project_name}
+                {item.evaluation_name && ` · ${item.evaluation_name}`}
+              </p>
+              <Link
+                href={`/lessons/${item.id}`}
+                className="text-[10px] font-medium text-primary hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                상세 보기 →
+              </Link>
+            </div>
+
+            <p
+              className="cursor-pointer text-center text-[10px] text-muted-foreground hover:text-foreground"
+              onClick={() => setOpen(false)}
+            >
+              ▴ 접기
+            </p>
+          </>
+        )}
+      </CardContent>
+    </Card>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function FactorColumn({
   title,
   subtitle,
@@ -224,82 +362,9 @@ function FactorColumn({
         <p className={`text-xs ${emptyColor}`}>해당 없음</p>
       ) : (
         <div className="space-y-3">
-          {items.map((item) => {
-            const parsed = parseLesson(item.content);
-            return (
-              <Link key={item.id} href={`/lessons/${item.id}`}>
-                <Card className={`cursor-pointer border-l-4 ${borderColor} transition-shadow hover:shadow-md`}>
-                  <CardContent className="p-3 space-y-2.5">
-                    {/* 1) 키워드 */}
-                    <div>
-                      <div className="mb-1 flex flex-wrap items-center gap-1">
-                        {item.level3 && (
-                          <Badge variant="outline" className="text-[10px] px-1.5 py-0">
-                            {item.level3}
-                          </Badge>
-                        )}
-                        {item.level3_sub && (
-                          <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-                            {item.level3_sub}
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="text-[13px] font-bold leading-snug">{parsed.keyword}</p>
-                    </div>
-
-                    {/* 2) 메커니즘 */}
-                    {parsed.mechanism.length > 0 && (
-                      <div className="space-y-1.5">
-                        {parsed.mechanism.map((sec, i) => (
-                          <div key={i}>
-                            {sec.title && (
-                              <p className="mb-0.5 inline-block rounded bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-gray-600">
-                                {sec.title}
-                              </p>
-                            )}
-                            <ul className="space-y-0.5">
-                              {sec.bullets.slice(0, 3).map((b, j) => {
-                                const cleaned = b
-                                  .replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/, "")
-                                  .replace(/^\([a-z]\)\s*/, "")
-                                  .replace(/^[0-9]+[.)]\s*/, "");
-                                return (
-                                  <li key={j} className="flex gap-1.5 text-[11px] leading-[1.6] text-muted-foreground">
-                                    <span className="mt-[7px] inline-block h-1 w-1 shrink-0 rounded-full bg-muted-foreground/30" />
-                                    <span className="line-clamp-2">{cleaned || b}</span>
-                                  </li>
-                                );
-                              })}
-                              {sec.bullets.length > 3 && (
-                                <li className="pl-2.5 text-[11px] text-primary">
-                                  +{sec.bullets.length - 3}개 더보기
-                                </li>
-                              )}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* 3) 핵심 교훈 */}
-                    {parsed.coreLesson && (
-                      <div className="rounded-md bg-blue-50 px-3 py-2">
-                        <p className="mb-0.5 text-[10px] font-bold text-blue-600">핵심 교훈</p>
-                        <p className="text-[11px] font-medium leading-[1.6] text-blue-900">
-                          {parsed.coreLesson}
-                        </p>
-                      </div>
-                    )}
-
-                    <p className="border-t pt-1.5 text-[10px] text-muted-foreground/70">
-                      {item.project_name}
-                      {item.evaluation_name && ` · ${item.evaluation_name}`}
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
-            );
-          })}
+          {items.map((item) => (
+            <LessonCard key={item.id} item={item} borderColor={borderColor} />
+          ))}
         </div>
       )}
     </div>
