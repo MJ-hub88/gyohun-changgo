@@ -21,9 +21,18 @@ export async function POST(req: NextRequest) {
       const buffer = Buffer.from(await file.arrayBuffer());
 
       if (file.name.endsWith(".pdf")) {
-        const pdfParse = (await import("pdf-parse")).default;
-        const parsed = await pdfParse(buffer);
-        text = parsed.text;
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const pdfParse = require("pdf-parse") as { PDFParse: new (buf: Buffer) => { getAllText: () => Promise<string> } };
+        const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
+        const data = new Uint8Array(buffer);
+        const doc = await getDocument({ data }).promise;
+        let allText = "";
+        for (let i = 1; i <= doc.numPages; i++) {
+          const page = await doc.getPage(i);
+          const content = await page.getTextContent();
+          allText += content.items.map((item: { str?: string }) => item.str || "").join(" ") + "\n";
+        }
+        text = allText;
       } else if (file.name.endsWith(".txt")) {
         text = buffer.toString("utf-8");
       } else {
