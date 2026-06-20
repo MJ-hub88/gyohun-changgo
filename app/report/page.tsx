@@ -45,25 +45,46 @@ function buildL2Sections(lessons: Lesson[]): L2Section[] {
     }));
 }
 
-function parseSections(content: string): { title: string; bullets: string[] }[] {
+type ParsedLesson = {
+  keyword: string;
+  mechanism: { title: string; bullets: string[] }[];
+  coreLesson: string;
+};
+
+function parseLesson(content: string): ParsedLesson {
   const lines = content.split("\n").map((l) => l.trim()).filter(Boolean);
-  const sections: { title: string; bullets: string[] }[] = [];
-  let current: { title: string; bullets: string[] } | null = null;
+  let keyword = "";
+  const mechanism: { title: string; bullets: string[] }[] = [];
+  let coreLesson = "";
+  let currentSection: { title: string; bullets: string[] } | null = null;
+  let inCore = false;
 
   for (const line of lines) {
-    if (line.startsWith("【")) {
-      if (current) sections.push(current);
-      const title = line.replace(/【|】/g, "").split("】")[0];
-      current = { title, bullets: [] };
+    if (line.startsWith("【") && (line.includes("핵심 교훈") || line.includes("핵심교훈"))) {
+      if (currentSection) mechanism.push(currentSection);
+      currentSection = null;
+      inCore = true;
       const rest = line.includes("】") ? line.split("】").slice(1).join("】").trim() : "";
-      if (rest) current.bullets.push(rest);
+      if (rest) coreLesson = rest;
+    } else if (line.startsWith("【")) {
+      if (currentSection) mechanism.push(currentSection);
+      const title = line.replace(/【|】/g, "").split("】")[0];
+      currentSection = { title, bullets: [] };
+      const rest = line.includes("】") ? line.split("】").slice(1).join("】").trim() : "";
+      if (rest) currentSection.bullets.push(rest);
+      inCore = false;
+    } else if (inCore) {
+      coreLesson += (coreLesson ? " " : "") + line;
+    } else if (currentSection) {
+      currentSection.bullets.push(line);
     } else {
-      if (!current) current = { title: "", bullets: [] };
-      current.bullets.push(line);
+      if (!keyword) keyword = line;
+      else keyword += " " + line;
     }
   }
-  if (current) sections.push(current);
-  return sections;
+  if (currentSection) mechanism.push(currentSection);
+
+  return { keyword, mechanism, coreLesson };
 }
 
 export default function ReportPage() {
@@ -204,55 +225,71 @@ function FactorColumn({
       ) : (
         <div className="space-y-3">
           {items.map((item) => {
-            const sections = parseSections(item.content);
+            const parsed = parseLesson(item.content);
             return (
               <Link key={item.id} href={`/lessons/${item.id}`}>
                 <Card className={`cursor-pointer border-l-4 ${borderColor} transition-shadow hover:shadow-md`}>
-                  <CardContent className="p-3 space-y-2">
-                    <div className="flex flex-wrap items-center gap-1">
-                      {item.level3 && (
-                        <Badge variant="outline" className="text-[10px] px-1.5 py-0">
-                          {item.level3}
-                        </Badge>
-                      )}
-                      {item.level3_sub && (
-                        <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-                          {item.level3_sub}
-                        </Badge>
-                      )}
+                  <CardContent className="p-3 space-y-2.5">
+                    {/* 1) 키워드 */}
+                    <div>
+                      <div className="mb-1 flex flex-wrap items-center gap-1">
+                        {item.level3 && (
+                          <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                            {item.level3}
+                          </Badge>
+                        )}
+                        {item.level3_sub && (
+                          <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                            {item.level3_sub}
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-[13px] font-bold leading-snug">{parsed.keyword}</p>
                     </div>
 
-                    {sections.map((sec, i) => (
-                      <div key={i} className="space-y-1">
-                        {sec.title && (
-                          <p className="inline-block rounded bg-gray-100 px-2 py-0.5 text-[11px] font-bold text-gray-700">
-                            {sec.title}
-                          </p>
-                        )}
-                        <ul className="space-y-0.5 pl-0.5">
-                          {sec.bullets.slice(0, 4).map((b, j) => {
-                            const cleaned = b
-                              .replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/, "")
-                              .replace(/^\([a-z]\)\s*/, "")
-                              .replace(/^[0-9]+[.)]\s*/, "");
-                            return (
-                              <li
-                                key={j}
-                                className="flex gap-1.5 text-[11px] leading-[1.6] text-muted-foreground"
-                              >
-                                <span className="mt-[7px] inline-block h-1 w-1 shrink-0 rounded-full bg-muted-foreground/30" />
-                                <span className="line-clamp-2">{cleaned || b}</span>
-                              </li>
-                            );
-                          })}
-                          {sec.bullets.length > 4 && (
-                            <li className="pl-2.5 text-[11px] text-primary">
-                              +{sec.bullets.length - 4}개 더보기
-                            </li>
-                          )}
-                        </ul>
+                    {/* 2) 메커니즘 */}
+                    {parsed.mechanism.length > 0 && (
+                      <div className="space-y-1.5">
+                        {parsed.mechanism.map((sec, i) => (
+                          <div key={i}>
+                            {sec.title && (
+                              <p className="mb-0.5 inline-block rounded bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-gray-600">
+                                {sec.title}
+                              </p>
+                            )}
+                            <ul className="space-y-0.5">
+                              {sec.bullets.slice(0, 3).map((b, j) => {
+                                const cleaned = b
+                                  .replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/, "")
+                                  .replace(/^\([a-z]\)\s*/, "")
+                                  .replace(/^[0-9]+[.)]\s*/, "");
+                                return (
+                                  <li key={j} className="flex gap-1.5 text-[11px] leading-[1.6] text-muted-foreground">
+                                    <span className="mt-[7px] inline-block h-1 w-1 shrink-0 rounded-full bg-muted-foreground/30" />
+                                    <span className="line-clamp-2">{cleaned || b}</span>
+                                  </li>
+                                );
+                              })}
+                              {sec.bullets.length > 3 && (
+                                <li className="pl-2.5 text-[11px] text-primary">
+                                  +{sec.bullets.length - 3}개 더보기
+                                </li>
+                              )}
+                            </ul>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
+
+                    {/* 3) 핵심 교훈 */}
+                    {parsed.coreLesson && (
+                      <div className="rounded-md bg-blue-50 px-3 py-2">
+                        <p className="mb-0.5 text-[10px] font-bold text-blue-600">핵심 교훈</p>
+                        <p className="text-[11px] font-medium leading-[1.6] text-blue-900">
+                          {parsed.coreLesson}
+                        </p>
+                      </div>
+                    )}
 
                     <p className="border-t pt-1.5 text-[10px] text-muted-foreground/70">
                       {item.project_name}
