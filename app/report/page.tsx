@@ -208,57 +208,56 @@ function FactorColumn({
             return (
               <Link key={item.id} href={`/lessons/${item.id}`}>
                 <Card className={`cursor-pointer border-l-4 ${borderColor} transition-shadow hover:shadow-md`}>
-                  <CardContent className="p-3">
-                    <div className="mb-1.5 flex flex-wrap items-center gap-1">
+                  <CardContent className="p-3 space-y-2">
+                    <div className="flex flex-wrap items-center gap-1">
                       {item.level3 && (
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-[10px] px-1.5 py-0">
                           {item.level3}
                         </Badge>
                       )}
                       {item.level3_sub && (
-                        <Badge variant="secondary" className="text-xs">
+                        <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
                           {item.level3_sub}
                         </Badge>
                       )}
                     </div>
-                    <p className="text-xs text-muted-foreground">
+
+                    {sections.map((sec, i) => (
+                      <div key={i} className="space-y-1">
+                        {sec.title && (
+                          <p className="inline-block rounded bg-gray-100 px-2 py-0.5 text-[11px] font-bold text-gray-700">
+                            {sec.title}
+                          </p>
+                        )}
+                        <ul className="space-y-0.5 pl-0.5">
+                          {sec.bullets.slice(0, 4).map((b, j) => {
+                            const cleaned = b
+                              .replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/, "")
+                              .replace(/^\([a-z]\)\s*/, "")
+                              .replace(/^[0-9]+[.)]\s*/, "");
+                            return (
+                              <li
+                                key={j}
+                                className="flex gap-1.5 text-[11px] leading-[1.6] text-muted-foreground"
+                              >
+                                <span className="mt-[7px] inline-block h-1 w-1 shrink-0 rounded-full bg-muted-foreground/30" />
+                                <span className="line-clamp-2">{cleaned || b}</span>
+                              </li>
+                            );
+                          })}
+                          {sec.bullets.length > 4 && (
+                            <li className="pl-2.5 text-[11px] text-primary">
+                              +{sec.bullets.length - 4}개 더보기
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                    ))}
+
+                    <p className="border-t pt-1.5 text-[10px] text-muted-foreground/70">
                       {item.project_name}
                       {item.evaluation_name && ` · ${item.evaluation_name}`}
                     </p>
-
-                    <div className="mt-2 space-y-1.5">
-                      {sections.map((sec, i) => (
-                        <div key={i}>
-                          {sec.title && (
-                            <p className="text-xs font-medium text-foreground">
-                              {sec.title}
-                            </p>
-                          )}
-                          <ul className="space-y-0.5">
-                            {sec.bullets.slice(0, 3).map((b, j) => {
-                              const cleaned = b
-                                .replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/, "")
-                                .replace(/^\([a-z]\)\s*/, "")
-                                .replace(/^[0-9]+[.)]\s*/, "");
-                              return (
-                                <li
-                                  key={j}
-                                  className="flex gap-1.5 text-xs leading-relaxed text-muted-foreground"
-                                >
-                                  <span className="mt-1.5 inline-block h-1 w-1 shrink-0 rounded-full bg-muted-foreground/40" />
-                                  <span className="line-clamp-2">{cleaned || b}</span>
-                                </li>
-                              );
-                            })}
-                            {sec.bullets.length > 3 && (
-                              <li className="text-xs text-primary">
-                                +{sec.bullets.length - 3}개 더보기
-                              </li>
-                            )}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
                   </CardContent>
                 </Card>
               </Link>
