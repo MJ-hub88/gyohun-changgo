@@ -38,3 +38,30 @@
 - **막힌 점 / 바꾼 점**: 처음에 화면을 3개(목록·입력·상세)로 잡았는데, 사용자가 대시보드를
   추가 요청했다. 분야별·사업요소별 통계를 한눈에 보는 게 축적의 성과를 체감하게 해주므로
   타당한 추가. 화면이 4개로 늘었지만 한 세션에 충분히 만들 수 있는 범위다.
+
+### 2026-06-20 연결
+- **한 것**: Node.js 포터블 설치 → GitHub CLI(winget) + Vercel CLI(npm) + Supabase CLI(Scoop) 설치
+  → create-next-app으로 Next.js 스캐폴드 → shadcn/ui 초기화 + 컴포넌트 추가 → Noto Sans KR 폰트
+  → 디자인 토큰(강조색 #2563EB) 적용 → GitHub 레포 생성(MJ-hub88/gyohun-changgo) → Vercel 프로젝트
+  연결 → Supabase Vercel Marketplace로 프로비저닝 → `.env.local` 자동 생성.
+
+- **왜 이 순서**: Node.js가 없으면 npm도 못 쓰므로 맨 먼저 설치. MSI 설치가 관리자 권한 문제로
+  실패해서 포터블(zip) 버전으로 우회. Supabase는 Vercel Marketplace를 통해 프로비저닝하면 계정·
+  프로젝트·환경변수가 자동으로 연결되므로 가장 편했다.
+
+- **어떻게**: Node.js는 nodejs.org에서 zip을 받아 `%LOCALAPPDATA%\nodejs`에 풀고 User PATH에
+  추가. GitHub CLI는 `winget install GitHub.cli`, Supabase CLI는 `scoop install supabase`.
+  Vercel-GitHub 연결 시 Login Connection이 없어서 Vercel Authentication 페이지에서 GitHub
+  Connect를 클릭해 OAuth 인증 완료. Supabase는 `vercel integration add supabase`로 한 번에
+  프로비저닝 — 약관 동의만 브라우저에서 처리.
+
+- **막힌 점 / 바꾼 점**: ① Node.js MSI 설치가 관리자 권한 없이 실패 → 포터블 zip으로 우회.
+  ② `vercel git connect`가 "Login Connection required" 오류 → Vercel Authentication 페이지에서
+  GitHub Connect 클릭 필요했는데, 팝업이 차단됨 → `vercel.com/new/import` URL로 직접 접근해
+  GitHub 연결 성공. ③ Supabase CLI `supabase login`이 대화형 입력을 기다려 멈춤 → Vercel
+  Marketplace 방식으로 우회해 CLI 로그인 없이 진행. ④ PDF 보고서 텍스트 추출 시도 — pdfjs-dist,
+  unpdf 등 여러 라이브러리를 시도했지만 한컴(HWP) 변환 PDF의 CID 폰트 인코딩 때문에 한글 추출 불가.
+
+- **배운 것**: Windows에서 관리자 권한 없이 Node.js를 쓰려면 포터블 zip이 안전. Vercel-GitHub
+  연결은 OAuth Login Connection이 먼저 돼 있어야 CLI에서 `git connect`가 동작한다. 한국 정부문서
+  PDF(HWP 변환)는 CID 폰트 인코딩 때문에 어떤 JS 라이브러리로도 한글 텍스트 추출이 안 된다.
