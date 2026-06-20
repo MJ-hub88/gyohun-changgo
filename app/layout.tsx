@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
-import { Nav } from "@/components/nav";
+import { NavWrapper } from "@/components/nav-wrapper";
 import "./globals.css";
 
 const notoSansKr = Noto_Sans_KR({
@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${notoSansKr.variable} h-full antialiased`}>
       <body className={`${notoSansKr.className} min-h-full flex flex-col bg-gray-50`}>
-        <Nav />
+        <NavWrapper />
         <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6">
           {children}
         </main>
